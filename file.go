@@ -100,9 +100,12 @@ func (t *FileTarget) rotate(bytes int64) {
 	if t.currentBytes+bytes <= t.MaxBytes || bytes > t.MaxBytes {
 		return
 	}
+	t.ForceRotateNow()
+}
+
+func (t *FileTarget) ForceRotateNow() {
 	t.fd.Close()
 	t.currentBytes = 0
-
 	var err error
 	for i := t.BackupCount; i >= 0; i-- {
 		path := t.FileName
